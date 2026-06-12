@@ -36,7 +36,6 @@
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
         }
         
-        /* Animação das frases espalhando para os LADOS */
         .float-phrase { 
             animation: floatOut 5s cubic-bezier(0.25, 1, 0.5, 1) forwards; 
             position: fixed; 
@@ -56,7 +55,6 @@
             50% { transform: translateY(-8px); opacity: 0.9; }
         }
 
-        /* Transições de entrada das seções */
         .fade-section {
             opacity: 0;
             transform: translateY(30px);
@@ -68,7 +66,11 @@
         }
     </style>
 </head>
-<body class="antialiased selection:bg-rose-500 selection:text-white" x-data="appManager()">
+<body class="antialiased selection:bg-rose-500 selection:text-white" 
+      x-data="appManager()" 
+      @click="resetarTempo()" 
+      @touchstart.passive="resetarTempo()" 
+      @keyup.window="resetarTempo()">
 
     <section id="inicio" class="fade-section relative min-h-[100dvh] flex flex-col items-center justify-center p-6">
         <div class="glass px-8 py-12 rounded-[2rem] text-center max-w-sm w-full mb-16 transform transition-all hover:scale-[1.02] duration-500">
@@ -96,7 +98,7 @@
             <div class="text-center mb-6 mt-2">
                 <h3 class="text-[11px] font-semibold tracking-[0.2em] text-rose-300/80 uppercase mb-1.5">Nossa Trilha Sonora</h3>
                 <p class="font-serif italic text-sm text-gray-300/90 leading-relaxed">
-                    Toda grande história de amor tem sua música tema.<br>E essa sempre será a nossa. 🎶
+                    Toda grande história de amor tem sua música tema. E essa sempre será a nossa. 🎶
                 </p>
             </div>
 
@@ -147,7 +149,7 @@
             Danrlêi & Sabrinna ❤️
         </h2>
         
-        <div class="glass p-3 rounded-full max-w-[300px] w-full relative group aspect-square flex items-center justify-center mb-6">
+        <div class="glass p-3 rounded-full max-w-[400px] w-full relative group aspect-square flex items-center justify-center mb-6">
             <div class="absolute inset-0 bg-gradient-to-tr from-rose-500/10 to-transparent rounded-full pointer-events-none"></div>
             <img src="MAPA_ESTRELAR.jpg" class="rounded-full w-full h-full object-cover shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-transform duration-700 group-hover:scale-[1.01]" alt="Mapa Estelar">
         </div>
@@ -168,7 +170,9 @@
         </a>
     </section>
 
-    <section id="termoo" class="fade-section relative min-h-[100dvh] flex flex-col items-center justify-center p-6" x-data="termooData()" @click="pausarAutoScroll()">
+    <section id="termoo" class="fade-section relative min-h-[100dvh] flex flex-col items-center justify-center p-6" 
+             x-data="termooData()" 
+             @keyup.window="tecladoFisico($event)">
         
         <div class="text-center mb-12 mt-8">
             <h2 class="font-bold text-lg md:text-xl tracking-[0.2em] uppercase text-rose-100/90">O que eu mais gosto em você</h2>
@@ -214,7 +218,7 @@
             <div class="text-3xl mb-4">🏆</div>
             <h3 class="text-emerald-300 font-serif italic mb-4 text-2xl drop-shadow-md">Parabéns, você acertou!</h3>
             <p class="text-sm md:text-base leading-relaxed text-gray-300/90 font-light">
-                A palavra era <strong class="text-white font-medium tracking-wide">OLHOS</strong>. <br><br>Eu amo seu olhar, eu te amo muito! ❤️
+                A palavra era <strong class="text-white font-medium tracking-wide">OLHAR</strong>. <br><br>Eu amo seu olhar, eu te amo muito! ❤️
             </p>
         </div>
 
@@ -223,7 +227,7 @@
         </a>
     </section>
 
-    <section id="frases" class="fade-section relative min-h-[100dvh] flex flex-col items-center justify-center p-6 overflow-hidden" x-data="frasesData()" @click="pausarAutoScroll()">
+    <section id="frases" class="fade-section relative min-h-[100dvh] flex flex-col items-center justify-center p-6 overflow-hidden" x-data="frasesData()">
         
         <div class="mb-10 flex flex-col items-center space-y-8 z-20 mt-8 w-full max-w-sm">
             <h2 class="font-serif italic text-2xl md:text-3xl text-rose-200/90 drop-shadow-md flex items-center gap-2">
@@ -344,7 +348,7 @@
                     this.intervalo = setInterval(() => {
                         this.indiceAtual++;
                         if (this.indiceAtual >= this.secoes.length) {
-                            this.pausarAutoScroll();
+                            clearInterval(this.intervalo);
                             return;
                         }
                         const idProximaSecao = this.secoes[this.indiceAtual];
@@ -352,8 +356,11 @@
                     }, 20000);
                 },
 
-                pausarAutoScroll() {
+                resetarTempo() {
                     clearInterval(this.intervalo);
+                    if (this.indiceAtual < this.secoes.length - 1) {
+                        this.iniciarAutoScroll();
+                    }
                 }
             }
         }
@@ -396,9 +403,17 @@
         // 3. LÓGICA DO TERMOO
         function termooData() {
             return {
-                palavraCerta: 'OLHOS', tentativaAtual: 0, letraAtual: 0, ganhou: false,
+                palavraCerta: 'OLHAR', tentativaAtual: 0, letraAtual: 0, ganhou: false,
                 tentativas: Array(5).fill().map(() => Array(5).fill('')),
                 feedback: Array(5).fill().map(() => Array(5).fill('')),
+                tecladoFisico(e) {
+                    if(this.ganhou) return;
+                    const tecla = e.key.toUpperCase();
+                    if (/^[A-Z]$/.test(tecla) && tecla.length === 1) this.digitar(tecla);
+                    if (tecla === 'BACKSPACE') this.apagar();
+                    if (tecla === 'ENTER') this.enviar();
+                },
+
                 digitar(l) { 
                     if (this.letraAtual < 5 && !this.ganhou && this.tentativaAtual < 5) { 
                         this.tentativas[this.tentativaAtual][this.letraAtual] = l; 
@@ -451,11 +466,7 @@
 
                 init() {
                     this.listaAnos = Object.keys(this.fotos);
-                    
-                    // Dispara frases automaticamente
                     setInterval(() => { this.gerarParticula() }, 2500);
-                    
-                    // Dispara a troca da foto da linha do tempo a cada 5s
                     this.iniciarAutoTimeline();
                 },
 
@@ -474,7 +485,7 @@
 
                 nextAno(auto = false) {
                     this.anoIndex = (this.anoIndex + 1) % this.listaAnos.length;
-                    if(!auto) this.resetarAutoTimeline(); // Se clicou manual, reseta o tempo
+                    if(!auto) this.resetarAutoTimeline();
                 },
 
                 prevAno() {
