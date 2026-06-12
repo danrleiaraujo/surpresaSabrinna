@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Sabrinna ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        [x-cloak] { display: none !important; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e, #1a0b1c);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #f8fafc; 
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .font-serif { font-family: 'Playfair Display', serif; }
+        
+        .glass { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Animação das frases espalhando para os LADOS */
+        .float-phrase { 
+            animation: floatOut 5s cubic-bezier(0.25, 1, 0.5, 1) forwards; 
+            position: fixed; 
+            pointer-events: none; 
+            z-index: 9999;
+        }
+        @keyframes floatOut {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            15% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+            85% { opacity: 0.8; }
+            100% { opacity: 0; transform: var(--tw-translate-dest) scale(0.9); }
+        }
+
+        .pulse-arrows { animation: bounceSoft 2.5s infinite; }
+        @keyframes bounceSoft {
+            0%, 100% { transform: translateY(0); opacity: 0.4; }
+            50% { transform: translateY(-8px); opacity: 0.9; }
+        }
+
+        /* Transições de entrada das seções */
+        .fade-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+        }
+        .fade-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-rose-500 selection:text-white" x-data="appManager()">
+
+    <section id="inicio" class="fade-section relative min-h-[100dvh] flex flex-col items-center justify-center p-6">
+        <div class="glass px-8 py-12 rounded-[2rem] text-center max-w-sm w-full mb-16 transform transition-all hover:scale-[1.02] duration-500">
+            <div class="text-rose-400/80 mb-6 text-4xl animate-pulse">✨</div>
+            <h1 class="font-serif italic text-3xl md:text-4xl text-rose-100/90 leading-tight drop-shadow-md">
+                Feliz dia dos namorados, <br>
+                esse é meu presente <br>
+                para você, Sabrinna ❤️
+            </h1>
+        </div>
+
+        <a href="#spotify" class="absolute bottom-12 flex flex-col items-center text-white/40 hover:text-white/80 transition-all pulse-arrows">
+            <span class="text-[10px] mb-3 font-light tracking-[0.2em] uppercase">Deslize para ver</span>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </a>
+    </section>
+
+    <section id="spotify" class="fade-section relative min-h-[100dvh] flex items-center justify-center p-6">
+        <div x-data="spotifyPlayer()" class="glass w-full max-w-sm rounded-[2.5rem] p-7 mb-20 relative overflow-hidden">
+            
+            <div class="absolute -top-20 -right-20 w-40 h-40 bg-rose-500/20 blur-[60px] rounded-full pointer-events-none"></div>
+
+            <audio x-ref="musica" src="photograph.mp3" @timeupdate="atualizarProgresso()" @ended="tocando = false"></audio>
+
+            <div class="text-center mb-6 mt-2">
+                <h3 class="text-[11px] font-semibold tracking-[0.2em] text-rose-300/80 uppercase mb-1.5">Nossa Trilha Sonora</h3>
+                <p class="font-serif italic text-sm text-gray-300/90 leading-relaxed">
+                    Toda grande história de amor tem sua música tema.<br>E essa sempre será a nossa. 🎶
+                </p>
+            </div>
+
+            <div class="aspect-square w-full mb-8 rounded-[1.5rem] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.5)] border border-white/10 ring-1 ring-white/5 relative group">
+                <img src="CAPA_DO_SPOTIFY.jpg" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Nossa Foto">
+            </div>
+            
+            <div class="flex items-center justify-between mb-6 px-1">
+                <div>
+                    <h2 class="text-xl font-bold tracking-tight text-white/95">Photograph</h2>
+                    <p class="text-rose-300/70 text-sm mt-0.5">Ed Sheeran</p>
+                </div>
+                <span class="text-rose-500 text-xl animate-pulse drop-shadow-[0_0_10px_rgba(244,63,94,0.5)]">❤️</span>
+            </div>
+            
+            <div class="w-full bg-white/10 h-1.5 rounded-full mb-3 overflow-hidden cursor-pointer relative" @click="pularTempo($event)">
+                <div class="bg-gradient-to-r from-rose-500 to-rose-400 h-full transition-all duration-100 rounded-full shadow-[0_0_10px_rgba(244,63,94,0.5)]" :style="`width: ${porcentagem}%`"></div>
+            </div>
+            
+            <div class="flex justify-between text-[11px] text-gray-400/80 mb-8 font-medium px-1">
+                <span x-text="formatarTempo(tempoAtual)">0:00</span>
+                <span x-text="formatarTempo(duracao)">0:00</span>
+            </div>
+            
+            <div class="flex items-center justify-center gap-10 text-white/90 select-none pb-2">
+                <span class="opacity-40 cursor-not-allowed text-2xl hover:opacity-60 transition-opacity">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
+                </span>
+                
+                <div @click="togglePlay()" class="w-16 h-16 flex items-center justify-center bg-rose-50 hover:bg-white text-rose-600 rounded-full cursor-pointer hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(225,29,72,0.3)]">
+                    <svg x-show="tocando" x-cloak class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg>
+                    <svg x-show="!tocando" class="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+
+                <span class="opacity-40 cursor-not-allowed text-2xl hover:opacity-60 transition-opacity">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>
+                </span>
+            </div>
+        </div>
+
+        <a href="#mapa" class="absolute bottom-12 flex flex-col items-center text-white/40 hover:text-white/80 transition-all pulse-arrows">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </a>
+    </section>
+
+    <section id="mapa" class="fade-section relative min-h-[100dvh] flex flex-col items-center justify-center p-6">
+        <h2 class="font-serif italic text-2xl md:text-3xl mb-8 text-rose-200/90 drop-shadow-md text-center">
+            Danrlêi & Sabrinna ❤️
+        </h2>
+        
+        <div class="glass p-3 rounded-full max-w-[300px] w-full relative group aspect-square flex items-center justify-center mb-6">
+            <div class="absolute inset-0 bg-gradient-to-tr from-rose-500/10 to-transparent rounded-full pointer-events-none"></div>
+            <img src="MAPA_ESTRELAR.jpg" class="rounded-full w-full h-full object-cover shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-transform duration-700 group-hover:scale-[1.01]" alt="Mapa Estelar">
+        </div>
+        
+        <div class="text-center space-y-4 max-w-sm mb-24">
+            <p class="text-sm md:text-base text-gray-200/90 italic px-4 font-light leading-relaxed tracking-wide">
+                "O exato momento em que tive a certeza de que todos os meus amanhãs seriam com você."
+            </p>
+            <div class="text-[10px] text-gray-400/80 uppercase tracking-widest space-y-1">
+                <p>Santo Estêvão - BA - BRASIL</p>
+                <p>28 DE MARÇO DE 2021 - 20:30</p>
+                <p>12.434371° S 39.260683° W</p>
+            </div>
+        </div>
+
+        <a href="#termoo" class="absolute bottom-12 flex flex-col items-center text-white/40 hover:text-white/80 transition-all pulse-arrows">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </a>
+    </section>
+
+    <section id="termoo" class="fade-section relative min-h-[100dvh] flex flex-col items-center justify-center p-6" x-data="termooData()" @click="pausarAutoScroll()">
+        
+        <div class="text-center mb-12 mt-8">
+            <h2 class="font-bold text-lg md:text-xl tracking-[0.2em] uppercase text-rose-100/90">O que eu mais gosto em você</h2>
+            <h3 class="font-serif italic text-rose-400/80 mt-3 text-lg">Um jogo com 5 letras 🧩</h3>
+        </div>
+        
+        <div class="grid grid-rows-5 gap-3 mb-10" x-cloak>
+            <template x-for="(tentativa, tIdx) in tentativas" :key="tIdx">
+                <div class="flex gap-3">
+                    <template x-for="(letra, lIdx) in tentativa" :key="lIdx">
+                        <div class="w-14 h-14 border flex items-center justify-center font-bold text-2xl rounded-xl uppercase transition-all duration-500"
+                             :class="feedback[tIdx][lIdx] === 'c' ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 shadow-[0_0_15px_rgba(52,211,153,0.2)]' : 
+                                     feedback[tIdx][lIdx] === 'p' ? 'bg-amber-500/20 border-amber-400 text-amber-300' : 
+                                     feedback[tIdx][lIdx] === 'e' ? 'bg-white/5 border-white/10 text-gray-500' : 'border-white/20 bg-transparent text-white/90'"
+                             x-text="letra"></div>
+                    </template>
+                </div>
+            </template>
+        </div>
+
+        <div class="max-w-[340px] w-full flex flex-col gap-2 mb-24" x-show="!ganhou" x-transition.opacity.duration.500ms>
+            <div class="flex justify-center gap-1.5">
+                <template x-for="l in 'QWERTYUIOP'.split('')">
+                    <button @click="digitar(l)" class="flex-1 bg-white/10 hover:bg-white/20 py-3.5 rounded-lg text-xs font-medium backdrop-blur-sm transition-all border border-white/5" x-text="l"></button>
+                </template>
+            </div>
+            <div class="flex justify-center gap-1.5 px-4">
+                <template x-for="l in 'ASDFGHJKL'.split('')">
+                    <button @click="digitar(l)" class="flex-1 bg-white/10 hover:bg-white/20 py-3.5 rounded-lg text-xs font-medium backdrop-blur-sm transition-all border border-white/5" x-text="l"></button>
+                </template>
+            </div>
+            <div class="flex justify-center gap-1.5">
+                <button @click="enviar()" class="flex-[1.5] bg-rose-600/80 hover:bg-rose-500 py-3.5 rounded-lg text-xs font-bold transition-all border border-rose-500/50 shadow-[0_0_15px_rgba(225,29,72,0.3)]">ENTER</button>
+                <template x-for="l in 'ZXCVBNM'.split('')">
+                    <button @click="digitar(l)" class="flex-1 bg-white/10 hover:bg-white/20 py-3.5 rounded-lg text-xs font-medium backdrop-blur-sm transition-all border border-white/5" x-text="l"></button>
+                </template>
+                <button @click="apagar()" class="flex-[1.5] bg-white/5 hover:bg-white/10 py-3.5 rounded-lg text-xs font-medium transition-all border border-white/5">DEL</button>
+            </div>
+        </div>
+
+        <div x-show="ganhou" x-transition.opacity.scale.duration.700ms class="glass p-8 rounded-[2rem] text-center max-w-sm w-full border-emerald-500/20 mb-28 relative overflow-hidden">
+            <div class="absolute inset-0 bg-emerald-500/5 pointer-events-none"></div>
+            <div class="text-3xl mb-4">🏆</div>
+            <h3 class="text-emerald-300 font-serif italic mb-4 text-2xl drop-shadow-md">Parabéns, você acertou!</h3>
+            <p class="text-sm md:text-base leading-relaxed text-gray-300/90 font-light">
+                A palavra era <strong class="text-white font-medium tracking-wide">OLHOS</strong>. <br><br>Eu amo seu olhar, eu te amo muito! ❤️
+            </p>
+        </div>
+
+        <a href="#frases" class="absolute bottom-12 flex flex-col items-center text-white/40 hover:text-white/80 transition-all pulse-arrows">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </a>
+    </section>
+
+    <section id="frases" class="fade-section relative min-h-[100dvh] flex flex-col items-center justify-center p-6 overflow-hidden" x-data="frasesData()" @click="pausarAutoScroll()">
+        
+        <div class="mb-10 flex flex-col items-center space-y-8 z-20 mt-8 w-full max-w-sm">
+            <h2 class="font-serif italic text-2xl md:text-3xl text-rose-200/90 drop-shadow-md flex items-center gap-2">
+                Nossa Linha do Tempo 🕰️
+            </h2>
+            
+            <div class="relative flex items-center justify-center w-full">
+                <button @click="prevAno()" class="absolute left-0 z-30 p-2 text-rose-300 hover:text-rose-100 hover:scale-110 active:scale-95 transition-all drop-shadow-md">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+
+                <div class="relative w-64 h-80 group">
+                    <div class="absolute inset-0 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.4)] border border-white/10 overflow-hidden bg-white/5">
+                        <template x-for="(url, ano) in fotos" :key="ano">
+                            <img :src="url" 
+                                 class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out"
+                                 :class="anoAtivo === ano ? 'opacity-100' : 'opacity-0'" 
+                                 alt="Nossa Foto">
+                        </template>
+                    </div>
+                    
+                    <div class="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md border border-white/20 text-white font-medium tracking-widest text-lg px-8 py-2 rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.3)] z-20">
+                        <span x-text="anoAtivo"></span>
+                    </div>
+                </div>
+
+                <button @click="nextAno()" class="absolute right-0 z-30 p-2 text-rose-300 hover:text-rose-100 hover:scale-110 active:scale-95 transition-all drop-shadow-md">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+            
+            <div class="flex gap-3 mt-8">
+                <template x-for="ano in listaAnos">
+                    <button @click="selecionarAno(ano)" 
+                            class="relative flex items-center justify-center w-6 h-6 rounded-full transition-all duration-300"
+                            :class="anoAtivo === ano ? 'scale-110' : 'hover:scale-110 opacity-50 hover:opacity-100'">
+                        <div class="absolute inset-0 rounded-full transition-all duration-300"
+                             :class="anoAtivo === ano ? 'bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.6)]' : 'bg-white/20 border border-white/30'"></div>
+                    </button>
+                </template>
+            </div>
+        </div>
+
+        <div id="container-botao-frases" class="relative z-20 mt-4 mb-24">
+            <button @click="lancarFraseManual($event)" 
+                    class="bg-white/95 text-gray-900 font-medium py-4 px-8 rounded-full shadow-[0_10px_30px_rgba(255,255,255,0.15)] hover:shadow-[0_10px_40px_rgba(255,255,255,0.25)] active:scale-[0.98] transition-all text-sm md:text-base flex items-center gap-3">
+                <span>Por que eu te amo?</span>
+                <span class="text-rose-500 text-xl">✨</span>
+            </button>
+        </div>
+
+        <template x-for="f in frasesAtivas" :key="f.id">
+            <div class="float-phrase text-rose-50 text-sm font-medium bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2 max-w-[200px] text-center"
+                 :style="`left: ${f.x}px; top: ${f.y}px; --tw-translate-dest: translate(${f.destX}px, ${f.destY}px)`">
+                 <span x-text="f.texto"></span>
+            </div>
+        </template>
+
+        <a href="#final" class="absolute bottom-12 flex flex-col items-center text-white/40 hover:text-white/80 transition-all pulse-arrows">
+            <span class="text-[10px] mb-3 font-light tracking-[0.2em] uppercase">Tem mais uma coisa...</span>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </a>
+    </section>
+
+    <section id="final" class="fade-section relative min-h-[100dvh] flex flex-col items-center justify-center p-6 text-center">
+        
+        <div class="glass px-8 py-14 rounded-[2.5rem] max-w-sm w-full relative overflow-hidden group shadow-[0_20px_50px_rgba(0,0,0,0.5)] transform transition-all hover:scale-[1.01] duration-700">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-rose-500/20 blur-[60px] rounded-full pointer-events-none"></div>
+
+            <div class="text-rose-400 text-5xl mb-8 animate-pulse drop-shadow-[0_0_15px_rgba(244,63,94,0.6)]">
+                💖
+            </div>
+            
+            <h2 class="font-serif italic text-2xl md:text-3xl text-rose-100/90 mb-6 drop-shadow-md">
+                Obrigado por tudo
+            </h2>
+            
+            <p class="text-gray-300/90 leading-relaxed font-light text-sm md:text-base tracking-wide mb-8">
+                Meu amor, muito obrigado por cada segundo e por todos os momentos inesquecíveis que já passamos juntos. Sou imensamente feliz ao seu lado! Que a gente continue construindo nossa linda história e que venham muitos e muitos outros Dias dos Namorados para celebrarmos. 
+                <br><br>Eu te amo demais! ❤️
+            </p>
+
+            <div class="border-t border-white/10 pt-6 mt-6">
+                <p class="font-serif italic text-rose-200/90 text-lg">Com amor,</p>
+                <p class="font-bold tracking-widest uppercase text-white/95 mt-1 text-sm">Danrlêi</p>
+            </div>
+        </div>
+
+        <a href="#inicio" class="absolute bottom-10 flex flex-col items-center text-white/40 hover:text-white/80 transition-all pulse-arrows">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+            <span class="text-[10px] mt-3 font-light tracking-[0.2em] uppercase">Voltar ao Início</span>
+        </a>
+    </section>
+
+    <script>
+        // 1. GERENCIADOR DE TRANSIÇÃO AUTOMÁTICA
+        function appManager() {
+            return {
+                secoes: ['inicio', 'spotify', 'mapa', 'termoo', 'frases', 'final'],
+                indiceAtual: 0,
+                intervalo: null,
+
+                init() {
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('visible');
+                                this.indiceAtual = this.secoes.indexOf(entry.target.id);
+                            }
+                        });
+                    }, { threshold: 0.3 });
+
+                    document.querySelectorAll('.fade-section').forEach(sec => observer.observe(sec));
+                    this.iniciarAutoScroll();
+                },
+
+                iniciarAutoScroll() {
+                    this.intervalo = setInterval(() => {
+                        this.indiceAtual++;
+                        if (this.indiceAtual >= this.secoes.length) {
+                            this.pausarAutoScroll();
+                            return;
+                        }
+                        const idProximaSecao = this.secoes[this.indiceAtual];
+                        document.getElementById(idProximaSecao).scrollIntoView({ behavior: 'smooth' });
+                    }, 20000);
+                },
+
+                pausarAutoScroll() {
+                    clearInterval(this.intervalo);
+                }
+            }
+        }
+
+        // 2. LÓGICA DO SPOTIFY
+        function spotifyPlayer() {
+            return {
+                tocando: false, tempoAtual: 0, duracao: 0, porcentagem: 0,
+                init() { 
+                    this.$refs.musica.onloadedmetadata = () => { this.duracao = this.$refs.musica.duration; }; 
+                    setTimeout(() => {
+                        if(!this.tocando) {
+                            this.$refs.musica.play().then(() => {
+                                this.tocando = true;
+                            }).catch(e => console.log("Áudio aguardando interação do usuário."));
+                        }
+                    }, 10000);
+                },
+                togglePlay() { 
+                    const a = this.$refs.musica; 
+                    this.tocando ? a.pause() : a.play(); 
+                    this.tocando = !this.tocando; 
+                },
+                atualizarProgresso() { 
+                    const a = this.$refs.musica; 
+                    this.tempoAtual = a.currentTime; 
+                    this.porcentagem = (this.tempoAtual / this.duracao) * 100; 
+                },
+                pularTempo(e) { 
+                    const b = e.currentTarget; 
+                    this.$refs.musica.currentTime = (e.offsetX / b.offsetWidth) * this.duracao; 
+                },
+                formatarTempo(s) { 
+                    if (isNaN(s)) return "0:00"; 
+                    return `${Math.floor(s / 60)}:${Math.floor(s % 60).toString().padStart(2, '0')}`; 
+                }
+            }
+        }
+
+        // 3. LÓGICA DO TERMOO
+        function termooData() {
+            return {
+                palavraCerta: 'OLHOS', tentativaAtual: 0, letraAtual: 0, ganhou: false,
+                tentativas: Array(5).fill().map(() => Array(5).fill('')),
+                feedback: Array(5).fill().map(() => Array(5).fill('')),
+                digitar(l) { 
+                    if (this.letraAtual < 5 && !this.ganhou && this.tentativaAtual < 5) { 
+                        this.tentativas[this.tentativaAtual][this.letraAtual] = l; 
+                        this.letraAtual++; 
+                    } 
+                },
+                apagar() { 
+                    if (this.letraAtual > 0 && !this.ganhou) { 
+                        this.letraAtual--; 
+                        this.tentativas[this.tentativaAtual][this.letraAtual] = ''; 
+                    } 
+                },
+                enviar() {
+                    if (this.letraAtual === 5 && !this.ganhou) {
+                        const pal = this.tentativas[this.tentativaAtual].join('');
+                        let corretas = 0;
+                        for (let i = 0; i < 5; i++) {
+                            if (pal[i] === this.palavraCerta[i]) { this.feedback[this.tentativaAtual][i] = 'c'; corretas++; }
+                            else if (this.palavraCerta.includes(pal[i])) this.feedback[this.tentativaAtual][i] = 'p';
+                            else this.feedback[this.tentativaAtual][i] = 'e';
+                        }
+                        if (corretas === 5) this.ganhou = true;
+                        else { this.tentativaAtual++; this.letraAtual = 0; }
+                    }
+                }
+            }
+        }
+
+        // 4. LÓGICA DO GERADOR DE FRASES E LINHA DO TEMPO AUTOMÁTICA
+        function frasesData() {
+            return {
+                fotos: {
+                    '2021': '2021.jpg',
+                    '2022': '2022.jpg',
+                    '2023': '2023.jpg',
+                    '2024': '2024.jpg',
+                    '2025': '2025.jpg',
+                    '2026': '2026.jpg'
+                },
+                listaAnos: [],
+                anoIndex: 0,
+                intervaloTimeline: null,
+
+                listaFrases: [
+                    "Seu apoio incondicional", "Seu abraço é meu lar", "O jeito que você ri", 
+                    "Sua inteligência", "Como você cuida de mim", "Seu carinho", 
+                    "Nossos planos juntos", "Sua paciência", "Seu cheiro", "Você me faz melhor"
+                ],
+                frasesAtivas: [],
+
+                init() {
+                    this.listaAnos = Object.keys(this.fotos);
+                    
+                    // Dispara frases automaticamente
+                    setInterval(() => { this.gerarParticula() }, 2500);
+                    
+                    // Dispara a troca da foto da linha do tempo a cada 5s
+                    this.iniciarAutoTimeline();
+                },
+
+                get anoAtivo() {
+                    return this.listaAnos[this.anoIndex];
+                },
+
+                iniciarAutoTimeline() {
+                    this.intervaloTimeline = setInterval(() => { this.nextAno(true); }, 5000);
+                },
+
+                resetarAutoTimeline() {
+                    clearInterval(this.intervaloTimeline);
+                    this.iniciarAutoTimeline();
+                },
+
+                nextAno(auto = false) {
+                    this.anoIndex = (this.anoIndex + 1) % this.listaAnos.length;
+                    if(!auto) this.resetarAutoTimeline(); // Se clicou manual, reseta o tempo
+                },
+
+                prevAno() {
+                    this.anoIndex = (this.anoIndex - 1 + this.listaAnos.length) % this.listaAnos.length;
+                    this.resetarAutoTimeline();
+                },
+
+                selecionarAno(ano) {
+                    this.anoIndex = this.listaAnos.indexOf(ano);
+                    this.resetarAutoTimeline();
+                },
+
+                lancarFraseManual(e) {
+                    for(let i=0; i<3; i++) { 
+                        setTimeout(() => this.gerarParticula(e.currentTarget), i * 150); 
+                    }
+                },
+
+                gerarParticula(targetElement = null) {
+                    const container = targetElement || document.getElementById('container-botao-frases');
+                    if(!container) return;
+
+                    const rect = container.getBoundingClientRect();
+                    if(!targetElement && (rect.top < 0 || rect.bottom > window.innerHeight)) return;
+
+                    const id = Date.now() + Math.random();
+                    const texto = this.listaFrases[Math.floor(Math.random() * this.listaFrases.length)];
+                    
+                    const x = rect.left + rect.width / 2;
+                    const y = rect.top + rect.height / 2; 
+
+                    const vaiParaEsquerda = Math.random() > 0.5;
+                    const multiplicadorX = vaiParaEsquerda ? -1 : 1;
+                    
+                    const destX = multiplicadorX * (120 + Math.random() * 130); 
+                    const destY = (Math.random() * 160) - 80;
+
+                    this.frasesAtivas.push({ id, texto, x, y, destX, destY });
+                    setTimeout(() => { this.frasesAtivas = this.frasesAtivas.filter(f => f.id !== id); }, 4900);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
